@@ -43,7 +43,7 @@ module basic_gates (
 endmodule
 ```
 # **Test Bench Program**
-```
+```c
 module tb2;
 
     reg a, b;
