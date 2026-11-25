@@ -21,10 +21,66 @@ File name	Purpose
 logic_gates.v	Logic-gate RTL
 logic_gates_tb.v	All input combinations and VCD generation
  # Verilog  Program
+ ```c
+module basic_gates (
+   input  wire a,
+   input  wire b,
+   output wire y_and,
+   output wire y_or,
+   output wire y_not,
+   output wire y_nand,
+   output wire y_nor,
+   output wire y_xor,
+);
 
+   assign y_and = a & b;   // AND gate
+   assign y_or  = a | b;   // OR gate
+   assign y_not = ~a;      // NOT gate (inverter)
+   assign y_nand = ~(a & b); // NAND gate
+   assign y_nor = ~(a + b); // NOR gate
+   assign y_xor = a ^ b;    // XOR gate
+
+endmodule
+```
 # **Test Bench Program**
+```
+module tb2;
 
+    reg a, b;
+    wire y_and, y_or, y_not;
 
+    // Instantiate the design under test (DUT)
+
+    basic_gates uut (
+        .a(a),
+        .b(b),
+        .y_and(y_and),
+        .y_or(y_or),
+        .y_not(y_not),
+        .y_nand(y_nand),
+        .y_nor(y_nor),
+        .y_xor(y_xor)
+    );
+
+    initial begin
+        // ---- VCD dump setup ----
+        $dumpfile("basic_gates.vcd");   // name of the VCD file to be generated
+        $dumpvars(0, tb2);               // dump all signals in this testbench hierarchy
+
+        // ---- Apply all 4 input combinations ----
+        $monitor("Time=%0t a=%b b=%b | AND=%b OR=%b NOT(a)=%b NAND=%b NOR=%b XOR=%b", $time, a, b, y_and, y_or, y_not, y_nand, y_nor, y_xor);
+
+        a = 0; b = 0; #10;
+        a = 0; b = 1; #10;
+        a = 1; b = 0; #10;
+        a = 1; b = 1; #10;
+
+        #10 $finish;
+#10;
+    end
+
+endmodule
+```
 
 
  
@@ -79,6 +135,7 @@ The design was compiled and simulated using Synopsys VCS, and the functionality 
 Output
 # OUTPUT
 
+<img width="1586" height="846" alt="image" src="https://github.com/user-attachments/assets/e517c6cf-fed5-489a-a82c-5a6abe8edf84" />
 
  
 # Viva-Voce Questions
